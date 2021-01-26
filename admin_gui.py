@@ -17,12 +17,22 @@ class AdminApp:
     def run(self):
 
         # SETUP
-
         self.root = Tk()
-        # self.root.geometry(f"{DATA_WIDTH}x{DATA_HEIGHT}")
+        self.root.attributes("-fullscreen", True)
+        # self.root.state("zoomed")
+        W = self.root.winfo_screenwidth()
+        H = self.root.winfo_screenheight()
+
+        self.root.geometry("{0}x{1}".format(W, H))
         self.root.resizable(False, False)
-        self.root.title("Date")
+        self.root.title("Hello World")
         self.root.configure(bg=BACKGROUND)
+
+        # self.root = Tk()
+        # # self.root.geometry(f"{DATA_WIDTH}x{DATA_HEIGHT}")
+        # self.root.resizable(False, False)
+        # self.root.title("A")
+        # self.root.configure(bg=BACKGROUND)
 
         # -----------------------------------
 
