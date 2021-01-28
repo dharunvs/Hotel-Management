@@ -80,6 +80,36 @@ class BillApp:
 
     def item_onclick(self, j):
         self.selected_items.append(j)
+        self.add_item(j)
         print(j)
+
+    def add_item(self, item):
+        code = item[0]
+        name = item[1]
+        price = item[2]
+
+        self.frame20 = Frame(self.bill_frame, bd=3,
+                             relief=RIDGE, height=50, width=600)
+        self.frame20.configure(
+            height=self.frame20["height"], width=self.frame20["width"])
+        self.frame20.grid_propagate(0)
+        self.frame20.pack()
+
+        self.add_item_2()
+
+    def add_item_2(self):
+
+        code_frame = Frame(self.frame20, height=20,
+                           width=20, bd=3, relief=RIDGE)
+        code_frame.configure(
+            height=self.frame20["height"], width=self.frame20["width"])
+        code_frame.grid_propagate(0)
+        code_frame.place(x=0, y=0)
+
+        name_frame = Frame(self.frame20, height=40,
+                           width=50, bd=3, relief=RIDGE)
+        price_frame = Frame(self.frame20, height=40,
+                            width=50, bd=3, relief=RIDGE)
+
 
 # ----------------------------------------------------------------------------
