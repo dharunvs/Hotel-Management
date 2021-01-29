@@ -17,22 +17,22 @@ class AdminApp:
     def run(self):
 
         # SETUP
-        self.root = Tk()
-        self.root.attributes("-fullscreen", True)
-        # self.root.state("zoomed")
-        W = self.root.winfo_screenwidth()
-        H = self.root.winfo_screenheight()
-
-        self.root.geometry("{0}x{1}".format(W, H))
-        self.root.resizable(False, False)
-        self.root.title("Hello World")
-        self.root.configure(bg=BACKGROUND)
-
         # self.root = Tk()
-        # # self.root.geometry(f"{DATA_WIDTH}x{DATA_HEIGHT}")
+        # self.root.attributes("-fullscreen", True)
+        # # self.root.state("zoomed")
+        # W = self.root.winfo_screenwidth()
+        # H = self.root.winfo_screenheight()
+
+        # self.root.geometry("{0}x{1}".format(W, H))
         # self.root.resizable(False, False)
-        # self.root.title("A")
+        # self.root.title("Hello World")
         # self.root.configure(bg=BACKGROUND)
+
+        self.root = Tk()
+        # self.root.geometry(f"{DATA_WIDTH}x{DATA_HEIGHT}")
+        self.root.resizable(False, False)
+        self.root.title("A")
+        self.root.configure(bg=BACKGROUND)
 
         # -----------------------------------
 
@@ -112,11 +112,16 @@ class AdminApp:
 
     def password_window(self):
         self.win = Tk()
+        # self.win.attributes("-fullscreen", True)
         self.win.configure(bg=BACKGROUND)
-        password_label = Label(self.win, text="Enter Password", font=FONT,
+
+        frame = Frame(self.win, height=200, width=400, bg=BACKGROUND)
+        frame.pack(fill=BOTH, expand=True)
+
+        password_label = Label(frame, text="Enter Password", font=FONT,
                                bg=BACKGROUND, fg=FOREGROUND).grid(row=0, column=0, padx=10, sticky=W, pady=10)
-        self.password_entry = Entry(self.win, show="*", font=FONT)
-        submit = Button(self.win, text="Submit", font=FONT, command=self.password_check).grid(
+        self.password_entry = Entry(frame, show="*", font=FONT)
+        submit = Button(frame, text="Submit", font=FONT, command=self.password_check).grid(
             row=2, column=0, sticky=E, padx=10, pady=10)
 
         self.password_entry.grid(row=1, column=0, sticky=W, padx=10, pady=10)
