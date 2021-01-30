@@ -98,17 +98,17 @@ class BillApp:
                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=0, padx=20)
         self.name_label = Label(self.items_miniframe, text="NAME",
                                 font=FONT, bg=BACKGROUND, fg=YELLOW)
-        self.name_label.grid(row=0, column=1, padx=10, columnspan=2)
+        self.name_label.grid(row=0, column=1, padx=10)
         self.price_label = Label(self.items_miniframe, text="PRICE",
-                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=3, padx=20)
+                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=2, padx=20)
         self.quantity_label = Label(self.items_miniframe, text="QUANTITY",
-                                    font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=4, padx=20)
+                                    font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=3, padx=20)
         self.add_label = Label(self.items_miniframe, text="ADD",
-                               font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=5, padx=20)
+                               font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=4, padx=20)
         self.remove_label = Label(self.items_miniframe, text="REMOVE",
-                                  font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=6, padx=20)
+                                  font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=5, padx=20)
         self.final_label = Label(self.items_miniframe, text="FINAL",
-                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=7, padx=20)
+                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=6, padx=20)
 
         # self.minimini_frame = Frame(
         #     self.items_miniframe, bg=BACKGROUND, width=800, height=500, relief=RIDGE)
@@ -122,7 +122,7 @@ class BillApp:
 # ------------------------------- HELPERS ------------------------------------
 
     def item_onclick(self, item):
-        self.selected_items.append(item)
+        self.selected_items.append([item, 1])
         # self.add_item(item)
         self.add_item_bill()
         print(item)
@@ -132,24 +132,28 @@ class BillApp:
 
         for i in self.items_list:
             if name == i[1]:
-                self.selected_items.append(i)
+                self.selected_items.append([i, 1])
                 self.add_item_bill()
 
     def add_item_bill(self):
         for i in range(len(self.selected_items)):
             label1 = Label(self.items_miniframe,
-                           text=f"{self.selected_items[i][0]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+                           text=f"{self.selected_items[i][0][0]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
             label2 = Label(self.items_miniframe,
-                           text=f"{self.selected_items[i][1]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+                           text=f"{self.selected_items[i][0][1]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
             label3 = Label(self.items_miniframe,
-                           text=f"{self.selected_items[i][2]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+                           text=f"{self.selected_items[i][0][2]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
 
             label4 = Label(self.items_miniframe, text="1",
                            bg=BACKGROUND, fg=BACKGROUND, font=FONT)
 
+            label5 = Label(self.items_miniframe,
+                           text=f"{self.selected_items[i][1]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+
             label1.grid(row=i+2, column=0, padx=20)
-            label2.grid(row=i+2, column=1, columnspan=2, padx=20)
-            label3.grid(row=i+2, column=3, padx=20)
-            label4.grid(row=i+2, column=4, padx=20)
+            label2.grid(row=i+2, column=1, padx=20)
+            label3.grid(row=i+2, column=2, padx=20)
+            label4.grid(row=i+2, column=3, padx=20)
+            label5.grid(row=i+2, column=3, padx=20)
 
 # ----------------------------------------------------------------------------
