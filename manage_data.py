@@ -15,8 +15,23 @@ class Database:
         except:
             pass
 
-    def delete_from_db(self, data):
-        pass
+    def delete_from_db_uname(self, data):
+        try:
+            self.execute(
+                f'''DELETE FROM ITEMS WHERE NAME={data}'''
+            )
+            self.connection.commit()
+        except:
+            pass
+
+    def delete_from_db_ucode(self, data):
+        try:
+            self.execute(
+                f'''DELETE FROM ITEMS WHERE CODE={data}'''
+            )
+            self.connection.commit()
+        except:
+            pass
 
     def get_from_db(self):
         self.cursor.execute(f'''SELECT * FROM ITEMS''')

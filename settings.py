@@ -11,6 +11,9 @@ BH = 9
 POS_WIDTH = 1280
 POS_HEIGHT = 720
 
+KOT_WIDTH = 1280
+KOT_HEIGHT = 720
+
 DATA_WIDTH = 800
 DATA_HEIGHT = 400
 
@@ -28,6 +31,7 @@ TEXT = "#f0f8ff"
 
 
 # OTHERS
+
 FONT = "Consolas"
 
 

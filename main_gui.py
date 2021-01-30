@@ -2,6 +2,7 @@ from tkinter import *
 from settings import *
 from admin_gui import *
 from pos_gui import *
+from kot_gui import *
 
 
 class App:
@@ -9,6 +10,7 @@ class App:
         self.root = None
         self.adminC = AdminApp()
         self.posC = BillApp()
+        self.kotc = KOT()
 
         self.admin_but = Button
         self.pos_but = Button
@@ -69,6 +71,7 @@ class App:
 
     def kot(self):
         self.window.destroy()
+        self.kotc.run()
 
 
 # ----------------------------------------------------------------------------
