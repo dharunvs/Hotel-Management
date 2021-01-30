@@ -33,11 +33,9 @@ class BillApp:
         W = POS_WIDTH
         H = POS_HEIGHT
 
-        # self.window.geometry("{0}x{1}".format(W, H))
-
         self.window.geometry(f"{W}x{H}")
         self.window.resizable(False, False)
-        self.window.title("Hello World")
+        self.window.title("POS")
         self.window.configure(bg=BACKGROUND)
 
         # -----------------------------------
@@ -92,6 +90,7 @@ class BillApp:
 
         # self.items_miniframe.configure(
         #     height=self.items_miniframe["height"], width=self.items_miniframe["width"])
+
         self.items_miniframe.grid_propagate(0)
 
         self.code_label = Label(self.items_miniframe, text="CODE",
@@ -110,9 +109,9 @@ class BillApp:
         self.final_label = Label(self.items_miniframe, text="FINAL",
                                  font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=6, padx=20)
 
-        # self.minimini_frame = Frame(
+        # self.mini_mini_frame = Frame(
         #     self.items_miniframe, bg=BACKGROUND, width=800, height=500, relief=RIDGE)
-        # self.minimini_frame.grid(row=1, column=0, columnspan=8)
+        # self.mini_mini_frame.grid(row=1, column=0, columnspan=8)
         # -----------------------------------
 
         # -----------------------------------
@@ -122,38 +121,40 @@ class BillApp:
 # ------------------------------- HELPERS ------------------------------------
 
     def item_onclick(self, item):
-        self.selected_items.append([item, 1])
-        # self.add_item(item)
+        self.selected_items.append(item)
         self.add_item_bill()
-        print(item)
+        print(self.selected_items)
 
     def add_item(self):
         name = self.item_entry.get()
 
         for i in self.items_list:
             if name == i[1]:
-                self.selected_items.append([i, 1])
+                self.selected_items.append(i)
                 self.add_item_bill()
 
     def add_item_bill(self):
         for i in range(len(self.selected_items)):
+            count = self.selected_items.count(self.selected_items[i])
+
             label1 = Label(self.items_miniframe,
-                           text=f"{self.selected_items[i][0][0]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+                           text=f"{self.selected_items[i][0]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
             label2 = Label(self.items_miniframe,
-                           text=f"{self.selected_items[i][0][1]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
-            label3 = Label(self.items_miniframe,
-                           text=f"{self.selected_items[i][0][2]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
-
-            label4 = Label(self.items_miniframe, text="1",
-                           bg=BACKGROUND, fg=BACKGROUND, font=FONT)
-
-            label5 = Label(self.items_miniframe,
                            text=f"{self.selected_items[i][1]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+            label3 = Label(self.items_miniframe,
+                           text=f"{self.selected_items[i][2]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+            label4 = Label(self.items_miniframe, text=f"{count}",
+                           bg=BACKGROUND, fg=FOREGROUND, font=FONT)
 
             label1.grid(row=i+2, column=0, padx=20)
             label2.grid(row=i+2, column=1, padx=20)
             label3.grid(row=i+2, column=2, padx=20)
             label4.grid(row=i+2, column=3, padx=20)
-            label5.grid(row=i+2, column=3, padx=20)
+
+            if count > 1:
+                label1.destroy()
+                label2.destroy()
+                label3.destroy()
+                # label4.destroy()
 
 # ----------------------------------------------------------------------------

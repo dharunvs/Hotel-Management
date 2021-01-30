@@ -31,7 +31,7 @@ class AdminApp:
         self.root = Tk()
         # self.root.geometry(f"{DATA_WIDTH}x{DATA_HEIGHT}")
         self.root.resizable(False, False)
-        self.root.title("A")
+        self.root.title("Admin")
         self.root.configure(bg=BACKGROUND)
 
         # -----------------------------------
@@ -52,31 +52,7 @@ class AdminApp:
         self.delete_button = Button(
             self.root, text="Delete", width=6, font=FONT, borderwidth=0, bg=FOREGROUND, fg=TEXT, command=self.delete_data)
 
-        self.sheet = ttk.Treeview(self.root, column=(
-            "CODE", "NAME", "PRICE"), show="headings")
-
-        for row in self.dbase.get_from_db():
-            self.sheet.insert("", END, values=row)
-
-        self.sheet.column("#1", anchor=CENTER)
-        self.sheet.heading("#1", text="CODE")
-        self.sheet.column("#2", anchor=CENTER)
-        self.sheet.heading("#2", text="NAME")
-        self.sheet.column("#3", anchor=CENTER)
-        self.sheet.heading("#3", text="PRICE")
-
-        self.code_label.grid(row=0, column=0, padx=5, pady=5)
-        self.name_label.grid(row=0, column=1, padx=5, pady=5)
-        self.price_label.grid(row=0, column=2, padx=5, pady=5)
-
-        self.code_entry.grid(row=1, column=0, padx=5, pady=5)
-        self.name_entry.grid(row=1, column=1, padx=5, pady=5)
-        self.price_entry.grid(row=1, column=2, padx=5, pady=5)
-
-        self.add_button.grid(row=2, column=2, padx=5, pady=5)
-        self.delete_button.grid(row=3, column=2, padx=5, pady=5)
-
-        self.sheet.grid(row=4, column=0, columnspan=3, padx=5, pady=5)
+        self.main_tree()
 
         # -----------------------------------
 
@@ -108,20 +84,40 @@ class AdminApp:
             self.sheet.insert("", END, values=info[len(info)-1])
 
     def delete_data(self):
-        pass
+        name = self.name_entry.get()
+        code = self.code_entry.get()
+
+        if name != "":
+            try:
+                self.dbase.delete_from_db_uname(name)
+            except:
+                pass
+
+        if code != "":
+            try:
+                self.dbase.delete_from_db_ucode(code)
+            except:
+                pass
+
+        self.code_entry.delete(0, END)
+        self.name_entry.delete(0, END)
+        self.price_entry.delete(0, END)
+
+        self.main_tree()
 
     def password_window(self):
         self.win = Tk()
         # self.win.attributes("-fullscreen", True)
         self.win.configure(bg=BACKGROUND)
+        self.win.resizable(False, False)
 
         frame = Frame(self.win, height=200, width=400, bg=BACKGROUND)
         frame.pack(fill=BOTH, expand=True)
 
-        password_label = Label(frame, text="Enter Password", font=FONT,
+        password_label = Label(frame, text="Enter Password", font=FONT1(20),
                                bg=BACKGROUND, fg=FOREGROUND).grid(row=0, column=0, padx=10, sticky=W, pady=10)
-        self.password_entry = Entry(frame, show="*", font=FONT)
-        submit = Button(frame, text="Submit", font=FONT, command=self.password_check).grid(
+        self.password_entry = Entry(frame, show="*", font=FONT, width=30)
+        submit = Button(frame, text="Submit", font=FONT1(20), bd=5, bg=BACKGROUND, fg=FOREGROUND, command=self.password_check).grid(
             row=2, column=0, sticky=E, padx=10, pady=10)
 
         self.password_entry.grid(row=1, column=0, sticky=W, padx=10, pady=10)
@@ -134,6 +130,44 @@ class AdminApp:
             self.run()
         else:
             self.password_entry.delete(0, END)
+
+    def main_tree(self):
+        try:
+            self.sheet.destroy()
+        except:
+            pass
+
+        self.sheet = ttk.Treeview(self.root, column=(
+            "CODE", "NAME", "PRICE"), show="headings")
+
+        style = ttk.Style()
+        style.configure("Treeview", font=FONT, rowheight=30,
+                        bg=BACKGROUND, fg=FOREGROUND)
+        style.configure("Treeview.Heading", font=FONT1(20), rowheight=40,
+                        bg=BACKGROUND, fg=FOREGROUND)
+
+        for row in self.dbase.get_from_db():
+            self.sheet.insert("", END, values=row)
+
+        self.sheet.column("#1", anchor=CENTER)
+        self.sheet.heading("#1", text="CODE")
+        self.sheet.column("#2", anchor=CENTER)
+        self.sheet.heading("#2", text="NAME")
+        self.sheet.column("#3", anchor=CENTER)
+        self.sheet.heading("#3", text="PRICE")
+
+        self.code_label.grid(row=0, column=0, padx=5, pady=5)
+        self.name_label.grid(row=0, column=1, padx=5, pady=5)
+        self.price_label.grid(row=0, column=2, padx=5, pady=5)
+
+        self.code_entry.grid(row=1, column=0, padx=5, pady=5)
+        self.name_entry.grid(row=1, column=1, padx=5, pady=5)
+        self.price_entry.grid(row=1, column=2, padx=5, pady=5)
+
+        self.add_button.grid(row=2, column=2, padx=5, pady=5)
+        self.delete_button.grid(row=3, column=2, padx=5, pady=5)
+
+        self.sheet.grid(row=4, column=0, columnspan=3, padx=5, pady=5)
 
 
 # ----------------------------------------------------------------------------
