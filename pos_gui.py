@@ -22,6 +22,10 @@ class BillApp:
 
         self.items_button_list = []
 
+        self.price = 0
+        self.tax = 18
+        self.total_price = self.price + self.price*(self.tax//100)
+
         self.selected_items = []
 
     def run(self):
@@ -54,13 +58,19 @@ class BillApp:
         self.control_frame = Frame(self.frame3, relief=RIDGE, bd=10, height=H//3,
                                    width=2*(W)//3, bg=BACKGROUND)
 
-        for i in self.items_list:
+        r = 0
+        for i in range(len(self.items_list)):
             self.a = Button(self.items_frame,
-                            text=i[1], command=lambda j=i: self.item_onclick(j))
+                            text=self.items_list[i][1], font=FONT, width=16, command=lambda j=self.items_list[i]: self.item_onclick(j))
 
             # , command=lambda j=i: self.item_onclick(j)
 
-            self.a.pack()
+            c = 0
+            if i % 2 == 0:
+                r += 1
+            else:
+                c = 1
+            self.a.grid(row=r, column=c)
             self.items_button_list.append(self.a)
 
         self.frame1.grid(row=0, column=0)
@@ -102,18 +112,40 @@ class BillApp:
                                  font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=2, padx=20)
         self.quantity_label = Label(self.items_miniframe, text="QUANTITY",
                                     font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=3, padx=20)
-        self.add_label = Label(self.items_miniframe, text="ADD",
-                               font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=4, padx=20)
         self.remove_label = Label(self.items_miniframe, text="REMOVE",
-                                  font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=5, padx=20)
+                                  font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=4, padx=20)
         self.final_label = Label(self.items_miniframe, text="FINAL",
-                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=6, padx=20)
+                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=5, padx=20)
 
         # self.mini_mini_frame = Frame(
         #     self.items_miniframe, bg=BACKGROUND, width=800, height=500, relief=RIDGE)
         # self.mini_mini_frame.grid(row=1, column=0, columnspan=8)
         # -----------------------------------
+        self.price_display = Frame(
+            self.control_frame, bd=3, relief=RIDGE, width=250, height=120, bg=BACKGROUND)
+        self.price_display.place(x=600, y=20)
 
+        #####################
+
+        self.price1_label1 = Label(
+            self.price_display, text=f"Price", font=FONT1(20), bg=BACKGROUND, fg=FOREGROUND)
+
+        self.tax_label = Label(
+            self.price_display, text=f"Tax", font=FONT1(20), bg=BACKGROUND, fg=FOREGROUND)
+
+        self.tprice_label = Label(
+            self.price_display, text=f"Total", font=FONT1(20), bg=BACKGROUND, fg=FOREGROUND)
+
+        self.tax1_label = Label(
+            self.price_display, text=f"{self.tax}%", font=FONT1(16), bg=BACKGROUND, fg=FOREGROUND)
+
+        self.price1_label1.grid(row=0, column=0, padx=15)
+        self.tax_label.grid(row=1, column=0, padx=15)
+        self.tprice_label.grid(row=2, column=0, padx=15)
+
+        self.tax1_label.grid(row=1, column=1, padx=15)
+
+        self.add_price()
         # -----------------------------------
 
         self.window.mainloop()
@@ -123,7 +155,7 @@ class BillApp:
     def item_onclick(self, item):
         self.selected_items.append(item)
         self.add_item_bill()
-        print(self.selected_items)
+        # print(self.selected_items)
 
     def add_item(self):
         name = self.item_entry.get()
@@ -134,6 +166,7 @@ class BillApp:
                 self.add_item_bill()
 
     def add_item_bill(self):
+        self.price = 0
         for i in range(len(self.selected_items)):
             count = self.selected_items.count(self.selected_items[i])
 
@@ -146,15 +179,44 @@ class BillApp:
             label4 = Label(self.items_miniframe, text=f"{count}",
                            bg=BACKGROUND, fg=FOREGROUND, font=FONT)
 
+            button5 = Button(self.items_miniframe, text="x",
+                             bg=BACKGROUND, fg=YELLOW, width=2, height=1,  font=FONT1(12), command=None)
+            button5.grid_propagate(0)
+
             label1.grid(row=i+2, column=0, padx=20)
             label2.grid(row=i+2, column=1, padx=20)
             label3.grid(row=i+2, column=2, padx=20)
             label4.grid(row=i+2, column=3, padx=20)
+            button5.grid(row=i+2, column=4)
 
             if count > 1:
                 label1.destroy()
                 label2.destroy()
                 label3.destroy()
                 # label4.destroy()
+                button5.destroy()
+
+        for i in self.selected_items:
+            self.price += i[2]
+
+        self.total_price = self.price + self.price*(self.tax/100)
+        print(self.price*(self.tax/100))
+        self.add_price()
+
+    def add_price(self):
+        try:
+            self.price1_label.destroy()
+            self.tprice1_label.destroy()
+        except:
+            pass
+
+        self.price1_label = Label(
+            self.price_display, text=f"{self.price}", font=FONT1(16), bg=BACKGROUND, fg=YELLOW)
+        self.tprice1_label = Label(
+            self.price_display, text=f"{self.total_price}", font=FONT1(16), bg=BACKGROUND, fg=YELLOW)
+
+        self.price1_label.grid(row=0, column=1, padx=15)
+        self.tprice1_label.grid(row=2, column=1, padx=15)
+
 
 # ----------------------------------------------------------------------------
