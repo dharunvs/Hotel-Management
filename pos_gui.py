@@ -17,7 +17,7 @@ class BillApp:
         self.control_frame = Frame
 
         self.items_list = []
-        for row in self.dbase.get_from_db():
+        for row in self.dbase.get_from_dbitems():
             self.items_list.append(row)
 
         self.items_button_list = []
@@ -125,6 +125,14 @@ class BillApp:
             self.control_frame, bd=3, relief=RIDGE, width=250, height=120, bg=BACKGROUND)
         self.price_display.place(x=600, y=20)
 
+        self.order_but = Button(
+            self.control_frame, text="Order", width=10, font=FONT1(10), command=self.order)
+        self.print_but = Button(
+            self.control_frame, text="Print", width=10, font=FONT1(10), command=self.print1)
+
+        self.order_but.place(x=605, y=160)
+        self.print_but.place(x=700, y=160)
+
         #####################
 
         self.price1_label1 = Label(
@@ -200,7 +208,6 @@ class BillApp:
             self.price += i[2]
 
         self.total_price = self.price + self.price*(self.tax/100)
-        print(self.price*(self.tax/100))
         self.add_price()
 
     def add_price(self):
@@ -218,5 +225,10 @@ class BillApp:
         self.price1_label.grid(row=0, column=1, padx=15)
         self.tprice1_label.grid(row=2, column=1, padx=15)
 
+    def order(self):
+        pass
+
+    def print1(self):
+        pass
 
 # ----------------------------------------------------------------------------

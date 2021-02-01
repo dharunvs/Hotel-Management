@@ -7,7 +7,7 @@ class Database:
         self.cursor = self.connection.cursor()
         self.table = ""
 
-    def add_to_db(self, data):
+    def add_to_dbitems(self, data):
         try:
             self.execute(
                 f'''INSERT INTO ITEMS (CODE, NAME, PRICE) VALUES ({data})''')
@@ -15,7 +15,23 @@ class Database:
         except:
             pass
 
-    def delete_from_db_uname(self, data):
+    def add_to_dbkot(self, data):
+        try:
+            self.execute(
+                f'''INSERT INTO KOT (ORDER_NO, TABLE_NO, ITEMS) VALUES ({data})'''
+            )
+        except:
+            pass
+
+    def delete_from_dbkot(self, data):
+        try:
+            self.execute(
+                f'''DELETE FROM KOT WHERE ORDER_NO={data}'''
+            )
+        except:
+            pass
+
+    def delete_from_dbitems_uname(self, data):
         try:
             self.execute(
                 f'''DELETE FROM ITEMS WHERE NAME={data}'''
@@ -24,7 +40,7 @@ class Database:
         except:
             pass
 
-    def delete_from_db_ucode(self, data):
+    def delete_from_dbitems_ucode(self, data):
         try:
             self.execute(
                 f'''DELETE FROM ITEMS WHERE CODE={data}'''
@@ -33,7 +49,7 @@ class Database:
         except:
             pass
 
-    def get_from_db(self):
+    def get_from_dbitems(self):
         self.cursor.execute(f'''SELECT * FROM ITEMS''')
         info = self.cursor.fetchall()
 

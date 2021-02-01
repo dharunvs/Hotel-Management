@@ -75,11 +75,11 @@ class AdminApp:
 
     def add_data(self):
         item = self.get_data()
-        self.dbase.add_to_db(item)
+        self.dbase.add_to_dbitems(item)
         self.show()
 
     def show(self):
-        info = self.dbase.get_from_db()
+        info = self.dbase.get_from_dbitems()
         if self.item_string != ", , ":
             self.sheet.insert("", END, values=info[len(info)-1])
 
@@ -89,13 +89,13 @@ class AdminApp:
 
         if name != "":
             try:
-                self.dbase.delete_from_db_uname(name)
+                self.dbase.delete_from_dbitems_uname(name)
             except:
                 pass
 
         if code != "":
             try:
-                self.dbase.delete_from_db_ucode(code)
+                self.dbase.delete_from_dbitems_ucode(code)
             except:
                 pass
 
@@ -146,7 +146,7 @@ class AdminApp:
         style.configure("Treeview.Heading", font=FONT1(20), rowheight=40,
                         bg=BACKGROUND, fg=FOREGROUND)
 
-        for row in self.dbase.get_from_db():
+        for row in self.dbase.get_from_dbitems():
             self.sheet.insert("", END, values=row)
 
         self.sheet.column("#1", anchor=CENTER)
