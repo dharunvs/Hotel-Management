@@ -125,13 +125,26 @@ class BillApp:
             self.control_frame, bd=3, relief=RIDGE, width=250, height=120, bg=BACKGROUND)
         self.price_display.place(x=600, y=20)
 
+        self.order_label = Label(
+            self.control_frame, text="Order No", font=FONT, bg=BACKGROUND, fg=FOREGROUND)
+        self.table_label = Label(
+            self.control_frame, text="Table No", font=FONT, bg=BACKGROUND, fg=FOREGROUND)
+
+        self.order_entry = Entry(self.control_frame, font=FONT, width=2)
+        self.table_entry = Entry(self.control_frame, font=FONT, width=2)
+
         self.order_but = Button(
-            self.control_frame, text="Order", width=10, font=FONT1(10), command=self.order)
+            self.control_frame, text="Order", width=10, font=FONT1(10), bg=BACKGROUND, fg=WHITE, command=self.order)
         self.print_but = Button(
-            self.control_frame, text="Print", width=10, font=FONT1(10), command=self.print1)
+            self.control_frame, text="Print", width=10, font=FONT1(10), bg=BACKGROUND, fg=WHITE, command=self.print1)
 
         self.order_but.place(x=605, y=160)
         self.print_but.place(x=700, y=160)
+
+        self.order_label.place(x=10, y=10)
+        self.table_label.place(x=10, y=60)
+        self.order_entry.place(x=110, y=10)
+        self.table_entry.place(x=110, y=60)
 
         #####################
 
@@ -226,7 +239,18 @@ class BillApp:
         self.tprice1_label.grid(row=2, column=1, padx=15)
 
     def order(self):
-        pass
+        items_raw = self.selected_items
+        final_list = []
+
+        for i in set(items_raw):
+            final_list.append([i[1], items_raw.count(i)])
+
+        table = self.table_entry.get()
+        order = self.order_entry.get()
+
+        data = f"{order}, {table}, {final_list}"
+
+        self.dbase.add_to_dbkot(data)
 
     def print1(self):
         pass
