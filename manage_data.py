@@ -20,6 +20,7 @@ class Database:
             self.execute(
                 f'''INSERT INTO KOT (ORDER_NO, TABLE_NO, ITEMS) VALUES ({data})'''
             )
+            self.connection.commit()
         except:
             pass
 
@@ -28,6 +29,7 @@ class Database:
             self.execute(
                 f'''DELETE FROM KOT WHERE ORDER_NO={data}'''
             )
+            self.connection.commit()
         except:
             pass
 
