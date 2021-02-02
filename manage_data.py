@@ -16,13 +16,9 @@ class Database:
             pass
 
     def add_to_dbkot(self, data):
-        try:
-            self.execute(
-                f'''INSERT INTO KOT (ORDER_NO, TABLE_NO, ITEMS) VALUES ({data})'''
-            )
-            self.connection.commit()
-        except:
-            pass
+        self.execute(
+            f'''INSERT INTO KOT (ORDER_NO, TABLE_NO, ITEMS) VALUES ({data})''')
+        self.connection.commit()
 
     def delete_from_dbkot(self, data):
         try:
@@ -53,6 +49,12 @@ class Database:
 
     def get_from_dbitems(self):
         self.cursor.execute(f'''SELECT * FROM ITEMS''')
+        info = self.cursor.fetchall()
+
+        return info
+
+    def get_from_dbkot(self):
+        self.cursor.execute(f'''SELECT * FROM KOT''')
         info = self.cursor.fetchall()
 
         return info

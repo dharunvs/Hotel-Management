@@ -240,15 +240,15 @@ class BillApp:
 
     def order(self):
         items_raw = self.selected_items
-        final_list = []
+        final_list = ""
 
         for i in set(items_raw):
-            final_list.append([i[1], items_raw.count(i)])
+            final_list += f'''"{i[1]}-{items_raw.count(i)}"'''
 
         table = self.table_entry.get()
         order = self.order_entry.get()
 
-        data = f"{order}, {table}, {final_list}"
+        data = f'''{order}, {table}, {final_list}'''
 
         self.dbase.add_to_dbkot(data)
 
