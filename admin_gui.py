@@ -4,7 +4,7 @@ from settings import *
 from manage_data import Database
 
 
-class AdminApp:
+class Admin:
     def __init__(self):
         self.root = None
         self.dbase = Database()
