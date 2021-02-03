@@ -106,3 +106,5 @@ class KOT:
             for j in range(len(b)):
                 if b[1]["text"] == str(order):
                     a[i].destroy()
+                    self.dbase.delete_from_dbkot(order)
+                    break
