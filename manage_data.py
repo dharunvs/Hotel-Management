@@ -17,7 +17,7 @@ class Database:
 
     def add_to_dbkot(self, data):
         self.execute(
-            f'''INSERT INTO KOT (ORDER_NO, TABLE_NO, ITEMS) VALUES ({data})''')
+            f'''INSERT INTO KOT (ORDER_NO, TABLE_NO, ITEMS, NAME) VALUES ({data})''')
         self.connection.commit()
 
     def delete_from_dbkot(self, data):

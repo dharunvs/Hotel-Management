@@ -1,12 +1,14 @@
 from tkinter import *
 from settings import *
 from manage_data import Database
+from pos_gui import *
 
 
 class KOT:
     def __init__(self):
         self.window = None
         self.dbase = Database()
+        # self.posc = BillApp()
 
         W = KOT_WIDTH
         H = KOT_HEIGHT
@@ -17,12 +19,19 @@ class KOT:
         self.side_frame = Frame
 
     def run(self):
+        self.dbase = Database()
+        self.main_list = self.dbase.get_from_dbkot()
         self.window = Tk()
         # self.window.attributes("-fullscreen", True)
         W = KOT_WIDTH
         H = KOT_HEIGHT
 
-        self.window.geometry(f"{W}x{H}")
+        ws = self.window.winfo_screenwidth()
+        hs = self.window.winfo_screenheight()
+        x = (ws/2) - (W/2)
+        y = (hs/2) - (H/2)
+
+        self.window.geometry(f"{W}x{H}+{int(x)}+{int(y-40)}")
         self.window.resizable(False, False)
         self.window.title("KOT")
         self.window.configure(bg=BACKGROUND)
@@ -43,7 +52,9 @@ class KOT:
         self.data()
 
         # ---------------------------------------------------
-
+        self.pos_but = Button(self.side_frame, text="POS",
+                              bg=BACKGROUND, fg=YELLOW, font=FONT1(20), command=self.pos)
+        self.pos_but.place(x=0, y=0)
         # ---------------------------------------------------
 
         self.window.mainloop()
@@ -57,6 +68,7 @@ class KOT:
             order = self.main_list[i][0]
             table = self.main_list[i][1]
             items = self.main_list[i][2]
+            name = self.main_list[i][3]
 
             items = items.split("\"")
             new_items = []
@@ -66,13 +78,17 @@ class KOT:
             frame = Frame(self.main_frame, width=100, height=200,
                           bd=3, relief=RIDGE, bg=BACKGROUND)
             order_label = Label(
-                frame, text="Order No", font=FONT, bg=BACKGROUND, fg=FOREGROUND).grid(row=0, column=0)
+                frame, text="Order No", font=FONT, bg=BACKGROUND, fg=FOREGROUND).grid(row=0, column=0, pady=5, sticky=W)
             ordern_label = Label(
-                frame, text=f"{order}", font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=1)
+                frame, text=f"{order}", font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=1, pady=5)
             table_label = Label(
-                frame, text="Table No", font=FONT, bg=BACKGROUND, fg=FOREGROUND).grid(row=1, column=0, pady=10)
+                frame, text="Table No", font=FONT, bg=BACKGROUND, fg=FOREGROUND).grid(row=1, column=0, pady=5, sticky=W)
             tablen_label = Label(
-                frame, text=f"{table}", font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=1, column=1, pady=10)
+                frame, text=f"{table}", font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=1, column=1, pady=5)
+            name_label = Label(
+                frame, text="Name", font=FONT, bg=BACKGROUND, fg=FOREGROUND).grid(row=2, column=0, pady=5, sticky=W)
+            namen_label = Label(
+                frame, text=f"{name}", font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=2, column=1, pady=5)
 
             item_frame = Frame(frame, width=1280/6, height=200,
                                bd=3, relief=RIDGE, bg=BACKGROUND)
@@ -82,7 +98,7 @@ class KOT:
                     item_frame, text=f"{j[0]} - {j[1]}", font=FONT1(12), bg=BACKGROUND, fg=YELLOW)
                 items_label.grid(sticky=E, padx=10)
 
-            item_frame.grid(row=2, column=0, columnspan=2)
+            item_frame.grid(row=3, column=0, columnspan=2)
 
             done_button = Button(frame, text="Done", font=FONT,
                                  bg=BACKGROUND, fg=YELLOW, command=lambda j=self.main_list[i]: self.done(j[0]))
@@ -98,7 +114,6 @@ class KOT:
 
 # ------------------------------- HELPERS ------------------------------------
 
-
     def done(self, order):
         a = self.main_frame.winfo_children()
         for i in range(len(a)):
@@ -108,3 +123,8 @@ class KOT:
                     a[i].destroy()
                     self.dbase.delete_from_dbkot(order)
                     break
+
+    def pos(self):
+        # self.posc.run()
+        # self.window.destroy()
+        pass

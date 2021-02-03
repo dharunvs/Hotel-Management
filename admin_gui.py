@@ -65,7 +65,7 @@ class AdminApp:
         name = self.name_entry.get()
         price = self.price_entry.get()
 
-        self.item_string = f'''{code}, {name}, {price}'''
+        self.item_string = f'''{code}, "{name}", {price}'''
 
         self.code_entry.delete(0, END)
         self.name_entry.delete(0, END)

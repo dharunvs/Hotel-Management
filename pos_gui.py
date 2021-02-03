@@ -1,12 +1,14 @@
 from tkinter import *
 from settings import *
 from manage_data import Database
+from kot_gui import *
 
 
 class BillApp:
     def __init__(self):
         self.root = None
         self.dbase = Database()
+        self.kotc = KOT()
 
         self.frame1 = Frame
         self.frame2 = Frame
@@ -34,29 +36,34 @@ class BillApp:
 
         self.window = Tk()
         # self.window.attributes("-fullscreen", True)
-        W = POS_WIDTH
-        H = POS_HEIGHT
+        self.W = POS_WIDTH
+        self.H = POS_HEIGHT
 
-        self.window.geometry(f"{W}x{H}")
+        ws = self.window.winfo_screenwidth()
+        hs = self.window.winfo_screenheight()
+        x = (ws/2) - (self.W/2)
+        y = (hs/2) - (self.H/2)
+
+        self.window.geometry(f"{self.W}x{self.H}+{int(x)}+{int(y-40)}")
         self.window.resizable(False, False)
         self.window.title("POS")
         self.window.configure(bg=BACKGROUND)
 
         # -----------------------------------
 
-        self.frame1 = Frame(self.window, height=(2*H)//3,
-                            width=2*(W)//3, relief=RIDGE, bd=3, bg=BACKGROUND)
-        self.frame2 = Frame(self.window, height=H,
-                            width=W//3, relief=RIDGE, bd=3, bg=BACKGROUND)
-        self.frame3 = Frame(self.window, height=H//3,
-                            width=2*(W)//3, relief=RIDGE, bd=3, bg=BACKGROUND)
+        self.frame1 = Frame(self.window, height=(2*self.H)//3,
+                            width=2*(self.W)//3, relief=RIDGE, bd=3, bg=BACKGROUND)
+        self.frame2 = Frame(self.window, height=self.H,
+                            width=self.W//3, relief=RIDGE, bd=3, bg=BACKGROUND)
+        self.frame3 = Frame(self.window, height=self.H//3,
+                            width=2*(self.W)//3, relief=RIDGE, bd=3, bg=BACKGROUND)
 
-        self.bill_frame = Frame(self.frame1, relief=RIDGE, bd=10, height=(2*H)//3,
-                                width=2*(W)//3, bg=BACKGROUND)
-        self.items_frame = Frame(self.frame2, relief=RIDGE, bd=10, height=H,
-                                 width=W//3, bg=BACKGROUND)
-        self.control_frame = Frame(self.frame3, relief=RIDGE, bd=10, height=H//3,
-                                   width=2*(W)//3, bg=BACKGROUND)
+        self.bill_frame = Frame(self.frame1, relief=RIDGE, bd=10, height=(2*self.H)//3,
+                                width=2*(self.W)//3, bg=BACKGROUND)
+        self.items_frame = Frame(self.frame2, relief=RIDGE, bd=10, height=self.H,
+                                 width=self.W//3, bg=BACKGROUND)
+        self.control_frame = Frame(self.frame3, relief=RIDGE, bd=10, height=self.H//3,
+                                   width=2*(self.W)//3, bg=BACKGROUND)
 
         r = 0
         for i in range(len(self.items_list)):
@@ -83,43 +90,8 @@ class BillApp:
 
         # -----------------------------------
 
-        self.item_entry = Entry(self.bill_frame, font=FONT, width=20)
+        self.build_bill_frame()
 
-        self.item_entry.place(x=10, y=10)
-        self.add_but = Button(self.bill_frame, font=FONT,
-                              text="Add item", command=self.add_item)
-        self.add_but.place(x=300, y=10)
-
-        self.items_miniframe = Frame(self.bill_frame, relief=RIDGE, bg=BACKGROUND, height=(2*H)//3 - 150,
-                                     width=2*(W)//3 - 50)
-        self.items_miniframe.place(x=10, y=100)
-
-        # v = Scrollbar(self.items_miniframe, orient='horizontal')
-        # v.config(command=self.items_miniframe.yview)
-        # v.pack(side=RIGHT, fill=Y)
-
-        # self.items_miniframe.configure(
-        #     height=self.items_miniframe["height"], width=self.items_miniframe["width"])
-
-        self.items_miniframe.grid_propagate(0)
-
-        self.code_label = Label(self.items_miniframe, text="CODE",
-                                font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=0, padx=20)
-        self.name_label = Label(self.items_miniframe, text="NAME",
-                                font=FONT, bg=BACKGROUND, fg=YELLOW)
-        self.name_label.grid(row=0, column=1, padx=10)
-        self.price_label = Label(self.items_miniframe, text="PRICE",
-                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=2, padx=20)
-        self.quantity_label = Label(self.items_miniframe, text="QUANTITY",
-                                    font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=3, padx=20)
-        self.remove_label = Label(self.items_miniframe, text="REMOVE",
-                                  font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=4, padx=20)
-        self.final_label = Label(self.items_miniframe, text="FINAL",
-                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=5, padx=20)
-
-        # self.mini_mini_frame = Frame(
-        #     self.items_miniframe, bg=BACKGROUND, width=800, height=500, relief=RIDGE)
-        # self.mini_mini_frame.grid(row=1, column=0, columnspan=8)
         # -----------------------------------
         self.price_display = Frame(
             self.control_frame, bd=3, relief=RIDGE, width=250, height=120, bg=BACKGROUND)
@@ -129,22 +101,24 @@ class BillApp:
             self.control_frame, text="Order No", font=FONT, bg=BACKGROUND, fg=FOREGROUND)
         self.table_label = Label(
             self.control_frame, text="Table No", font=FONT, bg=BACKGROUND, fg=FOREGROUND)
+        self.name_label = Label(
+            self.control_frame, text="Name", font=FONT, bg=BACKGROUND, fg=FOREGROUND)
 
         self.order_entry = Entry(self.control_frame, font=FONT, width=2)
         self.table_entry = Entry(self.control_frame, font=FONT, width=2)
+        self.name_entry = Entry(self.control_frame, font=FONT, width=20)
 
         self.order_but = Button(
-            self.control_frame, text="Order", width=10, font=FONT1(10), bg=BACKGROUND, fg=WHITE, command=self.order)
-        self.print_but = Button(
-            self.control_frame, text="Print", width=10, font=FONT1(10), bg=BACKGROUND, fg=WHITE, command=self.print1)
+            self.control_frame, text="Order", width=10, font=FONT1(12), bg=BACKGROUND, fg=WHITE, command=self.order)
 
-        self.order_but.place(x=605, y=160)
-        self.print_but.place(x=700, y=160)
+        self.order_but.place(x=600, y=160)
 
         self.order_label.place(x=10, y=10)
         self.table_label.place(x=10, y=60)
+        self.name_label.place(x=10, y=110)
         self.order_entry.place(x=110, y=10)
         self.table_entry.place(x=110, y=60)
+        self.name_entry.place(x=110, y=110)
 
         #####################
 
@@ -167,6 +141,12 @@ class BillApp:
         self.tax1_label.grid(row=1, column=1, padx=15)
 
         self.add_price()
+        # -----------------------------------
+
+        self.kot_but = Button(self.control_frame, text="KOT",
+                              bg=BACKGROUND, fg=YELLOW, font=FONT1(20), command=self.kot)
+        self.kot_but.place(x=0, y=164)
+
         # -----------------------------------
 
         self.window.mainloop()
@@ -223,6 +203,50 @@ class BillApp:
         self.total_price = self.price + self.price*(self.tax/100)
         self.add_price()
 
+    def build_bill_frame(self):
+        try:
+            self.items_miniframe.destroy()
+        except:
+            pass
+
+        self.item_entry = Entry(self.bill_frame, font=FONT, width=20)
+
+        self.item_entry.place(x=10, y=10)
+        self.add_but = Button(self.bill_frame, font=FONT,
+                              text="Add item", command=self.add_item)
+        self.add_but.place(x=300, y=10)
+
+        self.items_miniframe = Frame(self.bill_frame, relief=RIDGE, bg=BACKGROUND, height=(2*self.H)//3 - 150,
+                                     width=2*(self.W)//3 - 50)
+        self.items_miniframe.place(x=10, y=100)
+
+        # v = Scrollbar(self.items_miniframe, orient='horizontal')
+        # v.config(command=self.items_miniframe.yview)
+        # v.pack(side=RIGHT, fill=Y)
+
+        # self.items_miniframe.configure(
+        #     height=self.items_miniframe["height"], width=self.items_miniframe["width"])
+
+        self.items_miniframe.grid_propagate(0)
+
+        self.code_label = Label(self.items_miniframe, text="CODE",
+                                font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=0, padx=20)
+        self.name_label = Label(self.items_miniframe, text="NAME",
+                                font=FONT, bg=BACKGROUND, fg=YELLOW)
+        self.name_label.grid(row=0, column=1, padx=10)
+        self.price_label = Label(self.items_miniframe, text="PRICE",
+                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=2, padx=20)
+        self.quantity_label = Label(self.items_miniframe, text="QUANTITY",
+                                    font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=3, padx=20)
+        self.remove_label = Label(self.items_miniframe, text="REMOVE",
+                                  font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=4, padx=20)
+        self.final_label = Label(self.items_miniframe, text="FINAL",
+                                 font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=0, column=5, padx=20)
+
+        # self.mini_mini_frame = Frame(
+        #     self.items_miniframe, bg=BACKGROUND, width=800, height=500, relief=RIDGE)
+        # self.mini_mini_frame.grid(row=1, column=0, columnspan=8)
+
     def add_price(self):
         try:
             self.price1_label.destroy()
@@ -247,12 +271,26 @@ class BillApp:
 
         table = self.table_entry.get()
         order = self.order_entry.get()
+        name = self.name_entry.get()
 
-        data = f'''{order}, {table}, {final_list}'''
+        data = f'''{order}, {table}, {final_list}, "{name}"'''
 
         self.dbase.add_to_dbkot(data)
+
+        self.selected_items = []
+        self.price = 0
+        self.total_price = 0
+        self.order_entry.delete(0, END)
+        self.table_entry.delete(0, END)
+        self.name_entry.delete(0, END)
+        self.build_bill_frame()
+        self.add_price()
 
     def print1(self):
         pass
 
 # ----------------------------------------------------------------------------
+
+    def kot(self):
+        self.kotc.run()
+        self.window.destroy()
