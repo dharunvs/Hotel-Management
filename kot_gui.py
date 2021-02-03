@@ -12,7 +12,7 @@ class KOT:
         self.window = None
         self.dbase = Database()
         try:
-            self.posc = BillApp()
+            self.posc = POS()
         except:
             pass
 
