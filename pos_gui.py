@@ -1,14 +1,21 @@
 from tkinter import *
 from settings import *
 from manage_data import Database
-from kot_gui import *
+
+try:
+    from kot_gui import *
+except:
+    pass
 
 
-class BillApp:
+class POS:
     def __init__(self):
         self.root = None
         self.dbase = Database()
-        self.kotc = KOT()
+        try:
+            self.kotc = KOT()
+        except:
+            pass
 
         self.frame1 = Frame
         self.frame2 = Frame
@@ -292,5 +299,8 @@ class BillApp:
 # ----------------------------------------------------------------------------
 
     def kot(self):
-        self.kotc.run()
-        self.window.destroy()
+        try:
+            self.kotc.run()
+            self.window.destroy()
+        except:
+            pass

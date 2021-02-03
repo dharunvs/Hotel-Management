@@ -8,8 +8,8 @@ from kot_gui import *
 class App:
     def __init__(self):
         self.root = None
-        self.adminC = AdminApp()
-        self.posC = BillApp()
+        self.adminC = Admin()
+        self.posC = POS()
         self.kotc = KOT()
 
         self.admin_but = Button

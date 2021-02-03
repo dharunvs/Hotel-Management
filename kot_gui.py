@@ -1,14 +1,20 @@
 from tkinter import *
 from settings import *
 from manage_data import Database
-from pos_gui import *
+try:
+    from pos_gui import *
+except:
+    pass
 
 
 class KOT:
     def __init__(self):
         self.window = None
         self.dbase = Database()
-        # self.posc = BillApp()
+        try:
+            self.posc = BillApp()
+        except:
+            pass
 
         W = KOT_WIDTH
         H = KOT_HEIGHT
@@ -39,22 +45,14 @@ class KOT:
         # ---------------------------------------------------
 
         self.main_frame = Frame(
-            self.window, bd=3, relief=RIDGE, bg=BACKGROUND, width=W, height=(3*H)//4)
-        self.side_frame = Frame(
-            self.window, bd=3, relief=RIDGE, bg=BACKGROUND, width=W, height=(1*H)//4)
+            self.window, bd=3, relief=RIDGE, bg=BACKGROUND, width=W, height=H)
 
         self.main_frame.grid_propagate(0)
         self.main_frame.grid(row=0, column=0)
 
-        self.side_frame.grid_propagate(0)
-        self.side_frame.grid(row=1, column=0)
-
         self.data()
 
         # ---------------------------------------------------
-        self.pos_but = Button(self.side_frame, text="POS",
-                              bg=BACKGROUND, fg=YELLOW, font=FONT1(20), command=self.pos)
-        self.pos_but.place(x=0, y=0)
         # ---------------------------------------------------
 
         self.window.mainloop()
@@ -114,6 +112,7 @@ class KOT:
 
 # ------------------------------- HELPERS ------------------------------------
 
+
     def done(self, order):
         a = self.main_frame.winfo_children()
         for i in range(len(a)):
@@ -125,6 +124,8 @@ class KOT:
                     break
 
     def pos(self):
-        # self.posc.run()
-        # self.window.destroy()
-        pass
+        try:
+            self.posc.run()
+            self.window.destroy()
+        except:
+            pass
