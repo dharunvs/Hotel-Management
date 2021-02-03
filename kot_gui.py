@@ -86,9 +86,9 @@ class KOT:
             name_label = Label(
                 frame, text="Name", font=FONT, bg=BACKGROUND, fg=FOREGROUND).grid(row=2, column=0, pady=5, sticky=W)
             namen_label = Label(
-                frame, text=f"{name}", font=FONT, bg=BACKGROUND, fg=YELLOW).grid(row=2, column=1, pady=5)
+                frame, text="%s" % name, font=FONT1(12), bg=BACKGROUND, fg=YELLOW).grid(row=2, column=1, pady=5)
 
-            item_frame = Frame(frame, width=1280/6, height=200,
+            item_frame = Frame(frame, width=1280/5, height=200,
                                bd=3, relief=RIDGE, bg=BACKGROUND)
             item_frame.grid_propagate(0)
             for j in new_items:
@@ -102,7 +102,7 @@ class KOT:
                                  bg=BACKGROUND, fg=YELLOW, command=lambda j=self.main_list[i]: self.done(j[0]))
             done_button.grid(columnspan=2, pady=10)
 
-            if i % 6 == 0:
+            if i % 5 == 0:
                 r += 1
 
             else:

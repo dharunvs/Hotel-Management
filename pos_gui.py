@@ -12,10 +12,7 @@ class POS:
     def __init__(self):
         self.root = None
         self.dbase = Database()
-        try:
-            self.kotc = KOT()
-        except:
-            pass
+        self.kotc = KOT()
 
         self.frame1 = Frame
         self.frame2 = Frame
