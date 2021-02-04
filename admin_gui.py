@@ -52,7 +52,7 @@ class Admin:
         n = StringVar()
         self.type_entry = ttk.Combobox(self.root, width=20, textvariable=n)
         self.type_entry["values"] = (
-            "INDIAN", "CHINESE", "KOREAN", "MALAYSIAN")
+            "INDIAN", "CHINESE", "ITALIAN", "ARABIC", "CHAT", "DESSERTS")
 
         self.code_label = Label(self.root, text="CODE",
                                 font=FONT, bg=BACKGROUND, fg=FOREGROUND)

@@ -69,26 +69,33 @@ class POS:
         self.control_frame = Frame(self.frame3, relief=RIDGE, bd=10, height=self.H//3,
                                    width=2*(self.W)//3, bg=BACKGROUND)
 
-        r = 0
-        for i in range(len(self.items_list)):
-            self.a = Button(self.items_frame,
-                            text=self.items_list[i][1], font=FONT, width=16, command=lambda j=self.items_list[i]: self.item_onclick(j))
+        self.types_frame = Frame(self.frame2, relief=RIDGE, bd=10, height=self.H,
+                                 width=self.W//3, bg=BACKGROUND)
 
-            # , command=lambda j=i: self.item_onclick(j)
+        cuisines = ["INDIAN", "CHINESE", "ITALIAN",
+                    "ARABIC", "CHAT", "DESSERTS"]
+
+        r = 0
+        for i in range(len(cuisines)):
+            self.type = Button(
+                self.types_frame, text=cuisines[i], font=FONT, width=16, bg=BACKGROUND,
+                fg=FOREGROUND, command=lambda j=cuisines[i]: self.add_items_display(j))
 
             c = 0
             if i % 2 == 0:
                 r += 1
             else:
                 c = 1
-            self.a.grid(row=r, column=c)
-            self.items_button_list.append(self.a)
+            self.type.grid(row=r, column=c, pady=5, padx=5)
+
+        self.add_items_display("INDIAN")
 
         self.frame1.grid(row=0, column=0)
         self.frame2.grid(row=0, column=1, rowspan=2)
         self.frame3.grid(row=1, column=0)
 
         self.items_frame.place(x=0, y=0)
+        self.types_frame.place(x=0, y=200)
         self.bill_frame.place(x=0, y=0)
         self.control_frame.place(x=0, y=0)
 
@@ -124,7 +131,7 @@ class POS:
         self.table_entry.place(x=110, y=60)
         self.name_entry.place(x=110, y=110)
 
-        #####################
+        # -----------------------------------
 
         self.price1_label1 = Label(
             self.price_display, text=f"Price", font=FONT1(20), bg=BACKGROUND, fg=FOREGROUND)
@@ -159,8 +166,11 @@ class POS:
 
     def item_onclick(self, item):
         self.selected_items.append(item)
-        self.add_item_bill()
+        self.add_item_bill(item)
         # print(self.selected_items)
+
+    def type_onclick(self, item):
+        print(item)
 
     def add_item(self):
         name = self.item_entry.get()
@@ -170,37 +180,34 @@ class POS:
                 self.selected_items.append(i)
                 self.add_item_bill()
 
-    def add_item_bill(self):
+    def add_item_bill(self, item):
         self.price = 0
         for i in range(len(self.selected_items)):
             count = self.selected_items.count(self.selected_items[i])
 
-            label1 = Label(self.items_miniframe,
-                           text=f"{self.selected_items[i][0]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
-            label2 = Label(self.items_miniframe,
-                           text=f"{self.selected_items[i][1]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
-            label3 = Label(self.items_miniframe,
-                           text=f"{self.selected_items[i][2]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
-            label4 = Label(self.items_miniframe, text=f"{count}",
-                           bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+            if count <= 1:
+                label1 = Label(self.items_miniframe,
+                               text=f"{self.selected_items[i][0]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+                label2 = Label(self.items_miniframe,
+                               text=f"{self.selected_items[i][1]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+                label3 = Label(self.items_miniframe,
+                               text=f"{self.selected_items[i][2]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+                self.label4 = Label(self.items_miniframe, text=f"{count}",
+                                    bg=BACKGROUND, fg=FOREGROUND, font=FONT)
+                button5 = Button(self.items_miniframe, text="x",
+                                 bg=BACKGROUND, fg=YELLOW, width=2, height=1,  font=FONT1(12), command=None)
+                button5.grid_propagate(0)
 
-            button5 = Button(self.items_miniframe, text="x",
-                             bg=BACKGROUND, fg=YELLOW, width=2, height=1,  font=FONT1(12), command=None)
-            button5.grid_propagate(0)
+                label1.grid(row=i+2, column=0, padx=20)
+                label2.grid(row=i+2, column=1, padx=20)
+                label3.grid(row=i+2, column=2, padx=20)
+                self.label4.grid(row=i+2, column=3, padx=20)
+                button5.grid(row=i+2, column=4)
 
-            label1.grid(row=i+2, column=0, padx=20)
-            label2.grid(row=i+2, column=1, padx=20)
-            label3.grid(row=i+2, column=2, padx=20)
-            label4.grid(row=i+2, column=3, padx=20)
-            button5.grid(row=i+2, column=4)
+            else:
+                self.label4["text"] = count
 
-            if count > 1:
-                label1.destroy()
-                label2.destroy()
-                label3.destroy()
-                # label4.destroy()
-                button5.destroy()
-
+        self.items_miniframe.update()
         for i in self.selected_items:
             self.price += i[2]
 
@@ -280,7 +287,6 @@ class POS:
         data = f'''{order}, {table}, {final_list}, "{name}"'''
 
         self.dbase.add_to_dbkot(data)
-
         self.selected_items = []
         self.price = 0
         self.total_price = 0
@@ -292,6 +298,29 @@ class POS:
 
     def print1(self):
         pass
+
+    def add_items_display(self, item):
+        try:
+            for i in self.items_frame.winfo_children():
+                i.destroy()
+        except:
+            pass
+
+        r = 0
+        for i in range(len(self.items_list)):
+            a = self.items_list[i][3]
+            if a == item:
+                self.a = Button(self.items_frame,
+                                text=self.items_list[i][1], font=FONT, width=16, bg=BACKGROUND,
+                                fg=FOREGROUND, command=lambda j=self.items_list[i]: self.item_onclick(j))
+
+            c = 0
+            if i % 2 == 0:
+                r += 1
+            else:
+                c = 1
+            self.a.grid(row=r, column=c, pady=5, padx=5)
+            self.items_button_list.append(self.a)
 
 # ----------------------------------------------------------------------------
 
