@@ -88,7 +88,7 @@ class POS:
                 c = 1
             self.type.grid(row=r, column=c, pady=5, padx=5)
 
-        self.add_items_display("INDIAN")
+        self.add_items_display("CHINESE")
 
         self.frame1.grid(row=0, column=0)
         self.frame2.grid(row=0, column=1, rowspan=2)
@@ -308,19 +308,18 @@ class POS:
 
         r = 0
         for i in range(len(self.items_list)):
-            a = self.items_list[i][3]
-            if a == item:
+            if self.items_list[i][3] == item:
                 self.a = Button(self.items_frame,
                                 text=self.items_list[i][1], font=FONT, width=16, bg=BACKGROUND,
                                 fg=FOREGROUND, command=lambda j=self.items_list[i]: self.item_onclick(j))
 
-            c = 0
-            if i % 2 == 0:
-                r += 1
-            else:
-                c = 1
-            self.a.grid(row=r, column=c, pady=5, padx=5)
-            self.items_button_list.append(self.a)
+                c = 0
+                if i % 2 == 0:
+                    r += 1
+                else:
+                    c = 1
+                self.a.grid(row=r, column=c, pady=5, padx=5)
+                self.items_button_list.append(self.a)
 
 # ----------------------------------------------------------------------------
 
