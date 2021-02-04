@@ -29,6 +29,15 @@ class Admin:
         # self.root.configure(bg=BACKGROUND)
 
         self.root = Tk()
+        self.W = POS_WIDTH
+        self.H = POS_HEIGHT
+
+        ws = self.root.winfo_screenwidth()
+        hs = self.root.winfo_screenheight()
+        x = (ws/2) - (self.W/2)
+        y = (hs/2) - (self.H/2)
+
+        self.root.geometry(f"{self.W}x{self.H}+{int(x)}+{int(y-40)}")
         # self.root.geometry(f"{DATA_WIDTH}x{DATA_HEIGHT}")
         self.root.resizable(False, False)
         self.root.title("Admin")
@@ -40,17 +49,27 @@ class Admin:
         self.name_entry = Entry(self.root, font=FONT, width=30)
         self.price_entry = Entry(self.root, font=FONT, width=10)
 
+        n = StringVar()
+        self.type_entry = ttk.Combobox(self.root, width=20, textvariable=n)
+        self.type_entry["values"] = (
+            "INDIAN", "CHINESE", "KOREAN", "MALAYSIAN")
+
         self.code_label = Label(self.root, text="CODE",
                                 font=FONT, bg=BACKGROUND, fg=FOREGROUND)
         self.name_label = Label(self.root, text="NAME",
                                 font=FONT, bg=BACKGROUND, fg=FOREGROUND)
         self.price_label = Label(
             self.root, text="PRICE", font=FONT, bg=BACKGROUND, fg=FOREGROUND)
+        self.type_label = Label(
+            self.root, text="TYPE", font=FONT, bg=BACKGROUND, fg=FOREGROUND)
 
         self.add_button = Button(
             self.root, text="Add", width=6, font=FONT, borderwidth=0, bg=FOREGROUND, fg=TEXT, command=self.add_data)
         self.delete_button = Button(
             self.root, text="Delete", width=6, font=FONT, borderwidth=0, bg=FOREGROUND, fg=TEXT, command=self.delete_data)
+
+        self.tree_frame = Frame(self.root, width=1280, height=680)
+        self.tree_frame.pack_propagate(0)
 
         self.main_tree()
 
@@ -64,12 +83,14 @@ class Admin:
         code = self.code_entry.get()
         name = self.name_entry.get()
         price = self.price_entry.get()
+        type = self.type_entry.get()
 
-        self.item_string = f'''{code}, "{name}", {price}'''
+        self.item_string = f'''{code}, "{name}", {price}, "{type}"'''
 
         self.code_entry.delete(0, END)
         self.name_entry.delete(0, END)
         self.price_entry.delete(0, END)
+        self.type_entry.delete(0, END)
 
         return self.item_string
 
@@ -102,6 +123,7 @@ class Admin:
         self.code_entry.delete(0, END)
         self.name_entry.delete(0, END)
         self.price_entry.delete(0, END)
+        self.type_entry.delete(0, END)
 
         self.main_tree()
 
@@ -137,8 +159,8 @@ class Admin:
         except:
             pass
 
-        self.sheet = ttk.Treeview(self.root, column=(
-            "CODE", "NAME", "PRICE"), show="headings")
+        self.sheet = ttk.Treeview(self.tree_frame, column=(
+            "CODE", "NAME", "PRICE", "TYPE"), show="headings", selectmode=EXTENDED)
 
         style = ttk.Style()
         style.configure("Treeview", font=FONT, rowheight=30,
@@ -149,25 +171,32 @@ class Admin:
         for row in self.dbase.get_from_dbitems():
             self.sheet.insert("", END, values=row)
 
-        self.sheet.column("#1", anchor=CENTER)
+        self.sheet.column("#1", anchor=CENTER, stretch=YES)
         self.sheet.heading("#1", text="CODE")
-        self.sheet.column("#2", anchor=CENTER)
+        self.sheet.column("#2", anchor=CENTER, stretch=YES)
         self.sheet.heading("#2", text="NAME")
-        self.sheet.column("#3", anchor=CENTER)
+        self.sheet.column("#3", anchor=CENTER, stretch=YES)
         self.sheet.heading("#3", text="PRICE")
+        self.sheet.column("#4", anchor=CENTER, stretch=YES)
+        self.sheet.heading("#4", text="TYPE")
 
         self.code_label.grid(row=0, column=0, padx=5, pady=5)
         self.name_label.grid(row=0, column=1, padx=5, pady=5)
         self.price_label.grid(row=0, column=2, padx=5, pady=5)
+        self.type_label.grid(row=0, column=3, padx=5, pady=5)
 
         self.code_entry.grid(row=1, column=0, padx=5, pady=5)
         self.name_entry.grid(row=1, column=1, padx=5, pady=5)
         self.price_entry.grid(row=1, column=2, padx=5, pady=5)
+        self.type_entry.grid(row=1, column=3, padx=5, pady=5)
+        self.type_entry.current()
 
-        self.add_button.grid(row=2, column=2, padx=5, pady=5)
-        self.delete_button.grid(row=3, column=2, padx=5, pady=5)
+        self.add_button.grid(row=1, column=4, padx=5, pady=5)
+        self.delete_button.grid(row=1, column=5, padx=5, pady=5)
 
-        self.sheet.grid(row=4, column=0, columnspan=3, padx=5, pady=5)
+        self.tree_frame.grid(row=4, column=0, columnspan=6,
+                             padx=5, pady=5)
+        self.sheet.pack(fill=BOTH, expand=1)
 
 
 # ----------------------------------------------------------------------------

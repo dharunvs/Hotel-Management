@@ -10,7 +10,7 @@ class Database:
     def add_to_dbitems(self, data):
         try:
             self.execute(
-                f'''INSERT INTO ITEMS (CODE, NAME, PRICE) VALUES ({data})''')
+                f'''INSERT INTO ITEMS (CODE, NAME, PRICE, TYPE) VALUES ({data})''')
             self.connection.commit()
         except:
             pass
