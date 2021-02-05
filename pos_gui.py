@@ -64,7 +64,7 @@ class POS:
 
         self.bill_frame = Frame(self.frame1, relief=RIDGE, height=(2*self.H)//3,
                                 width=2*(self.W)//3, bg=BACKGROUND)
-        self.items_frame = Frame(self.frame2, relief=RIDGE, bd=10, height=self.H,
+        self.items_frame = Frame(self.frame2, relief=RIDGE, bd=3, height=self.H,
                                  width=self.W//3, bg=BACKGROUND)
         self.control_frame = Frame(self.frame3, relief=RIDGE, height=self.H//3,
                                    width=2*(self.W)//3, bg=BACKGROUND)
@@ -88,13 +88,13 @@ class POS:
                 c = 1
             self.type.grid(row=r, column=c, pady=12, padx=15)
 
-        self.add_items_display("CHINESE")
+        self.add_items_display("INDIAN")
 
         self.frame1.grid(row=0, column=0)
         self.frame2.grid(row=0, column=1, rowspan=2)
         self.frame3.grid(row=1, column=0)
 
-        self.items_frame.place(x=0, y=0)
+        self.items_frame.place(x=15, y=10)
         self.types_frame.place(x=20, y=518)
         self.bill_frame.place(x=0, y=0)
         self.control_frame.place(x=0, y=0)
@@ -315,8 +315,15 @@ class POS:
         r = 0
         for i in range(len(self.items_list)):
             if self.items_list[i][3] == item:
+                text1 = self.items_list[i][1]
+                text1 = ""
+                text2 = text1.split()
+                text3 = ""
+                for m in text2:
+                    text3 += f"{m}\n"
+                text3 = text3[:-1]
                 self.a = Button(self.items_frame,
-                                text=self.items_list[i][1], font=FONT, width=16, bg=BACKGROUND,
+                                text=text3, font=FONT, width=20, height=3, bg=BACKGROUND,
                                 fg=FOREGROUND, command=lambda j=self.items_list[i]: self.item_onclick(j))
 
                 c = 0
@@ -324,7 +331,7 @@ class POS:
                     r += 1
                 else:
                     c = 1
-                self.a.grid(row=r, column=c, pady=5, padx=5)
+                self.a.grid(row=r, column=c)
                 self.items_button_list.append(self.a)
 
 # ----------------------------------------------------------------------------

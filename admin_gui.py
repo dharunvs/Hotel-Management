@@ -50,7 +50,8 @@ class Admin:
         self.price_entry = Entry(self.root, font=FONT, width=10)
 
         n = StringVar()
-        self.type_entry = ttk.Combobox(self.root, width=20, textvariable=n)
+        self.type_entry = ttk.Combobox(
+            self.root, width=20, font=FONT, textvariable=n)
         self.type_entry["values"] = (
             "INDIAN", "CHINESE", "ITALIAN", "ARABIC", "CHAT", "DESSERTS")
 
@@ -68,7 +69,7 @@ class Admin:
         self.delete_button = Button(
             self.root, text="Delete", width=6, font=FONT, borderwidth=0, bg=FOREGROUND, fg=TEXT, command=self.delete_data)
 
-        self.tree_frame = Frame(self.root, width=1280, height=680)
+        self.tree_frame = Frame(self.root, width=1260, height=640)
         self.tree_frame.pack_propagate(0)
 
         self.main_tree()
@@ -156,11 +157,18 @@ class Admin:
     def main_tree(self):
         try:
             self.sheet.destroy()
+            self.vsb.destroy()
         except:
             pass
 
         self.sheet = ttk.Treeview(self.tree_frame, column=(
-            "CODE", "NAME", "PRICE", "TYPE"), show="headings", selectmode=EXTENDED)
+            "CODE", "NAME", "PRICE", "TYPE"), show="headings")
+
+        self.vsb = ttk.Scrollbar(self.tree_frame, orient="vertical",
+                                 command=self.sheet.yview)
+        self.vsb.pack(side=RIGHT, fill=Y)
+
+        self.sheet.configure(yscrollcommand=self.vsb.set)
 
         style = ttk.Style()
         style.configure("Treeview", font=FONT, rowheight=30,
@@ -196,7 +204,7 @@ class Admin:
 
         self.tree_frame.grid(row=4, column=0, columnspan=6,
                              padx=5, pady=5)
-        self.sheet.pack(fill=BOTH, expand=1)
+        self.sheet.pack(fill=BOTH, side=LEFT, expand=1)
 
 
 # ----------------------------------------------------------------------------
