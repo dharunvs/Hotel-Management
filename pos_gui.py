@@ -26,12 +26,6 @@ class POS:
         for row in self.dbase.get_from_dbitems():
             self.items_list.append(row)
 
-        x = 0
-        for i in self.items_list:
-            if i[3] == "CHAT":
-                x += 1
-
-        print(x)
         self.items_button_list = []
 
         self.price = 0
@@ -84,7 +78,7 @@ class POS:
         r = 0
         for i in range(len(cuisines)):
             self.type = Button(
-                self.types_frame, text=cuisines[i], font=FONT, width=16, bg=BACKGROUND,
+                self.types_frame, text=cuisines[i], font=FONT1(12), width=16, bg=BACKGROUND,
                 fg=YELLOW, command=lambda j=cuisines[i]: self.add_items_display(j))
 
             c = 0
@@ -185,14 +179,14 @@ class POS:
         for i in self.items_list:
             if name == i[1]:
                 self.selected_items.append(i)
-                self.add_item_bill()
+                self.add_item_bill(name)
 
     def add_item_bill(self, item):
         self.price = 0
         for i in range(len(self.selected_items)):
             self.count = self.selected_items.count(self.selected_items[i])
 
-            if self.count <= 1:
+            if self.count == 1:
                 self.label1 = Label(self.items_miniframe,
                                     text=f"{self.selected_items[i][0]}", bg=BACKGROUND, fg=FOREGROUND, font=FONT)
                 self.label2 = Label(self.items_miniframe,
@@ -332,7 +326,7 @@ class POS:
                     text3 += f"{m}\n"
                 text3 = text3[:-1]
                 self.a = Button(self.items_frame,
-                                text=text3, font=FONT, width=10, height=3, bg=BACKGROUND,
+                                text=text3, font=FONT1(12), width=10, height=3, bg=BACKGROUND,
                                 fg=FOREGROUND, command=lambda j=self.items_list[i]: self.item_onclick(j))
 
                 if i % 4 == 0:

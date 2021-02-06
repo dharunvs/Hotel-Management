@@ -29,7 +29,7 @@ class App:
         H = MAIN_HEIGHT
         # self.window.geometry(f"{W}x{H}")
         self.window.resizable(False, False)
-        self.window.title("Hello World")
+        self.window.title("Select one")
         self.window.configure(bg=BACKGROUND)
 
         # -----------------------------------
