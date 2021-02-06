@@ -50,14 +50,21 @@ class KOT:
         self.main_frame.grid_propagate(0)
         self.main_frame.grid(row=0, column=0)
 
-        self.data()
-
+        if self.main_list:
+            self.data()
+        else:
+            self.label = Label(self.main_frame, text="No orders left",
+                               font=FONT1(14), bg=BACKGROUND, fg=YELLOW).grid()
         # ---------------------------------------------------
         # ---------------------------------------------------
 
         self.window.mainloop()
 
     def data(self):
+        try:
+            self.label.destroy()
+        except:
+            pass
 
         r = 0
         c = 0
@@ -104,7 +111,7 @@ class KOT:
 
             if i % 5 == 0:
                 r += 1
-
+                c = 0
             else:
                 c += 1
             frame.grid(row=r, column=c)
