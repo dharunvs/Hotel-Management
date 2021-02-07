@@ -1,4 +1,22 @@
 # Hotel-Management
 
-main.py connects admin_gui.py, pos_gui.py and kot_gui.py.  
-manage_db.py is used to control data/data.db
+A GUI Hotel-Management app based on Tkinter and sqlite3 for Database Management
+
+
+
+Requirements:
+
+>Python 3+ , sqlite3 and Tkinter  
+
+
+Usage:
+
+
+~clone this Repository and run the main.py file using `python3 main.py` or `python main.py` .
+
+
+
+Bugs:
+
+
+~To report any bugs click ![here](https://github.com/dharunvs/Hotel-Management/issues).
