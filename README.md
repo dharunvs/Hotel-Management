@@ -6,7 +6,7 @@ A GUI Hotel-Management app based on Tkinter and sqlite3 for Database Management
 
 Requirements:
 
-~Python 3+ , sqlite3 and Tkinter  
+>Python 3+ , sqlite3 and Tkinter  
 
 
 Usage:
