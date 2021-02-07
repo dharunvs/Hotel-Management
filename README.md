@@ -7,8 +7,7 @@ BY ![Dharun V S](https://github.com/dharunvs) and ***Jeelani***
 
 Requirements:
 
-
-~Python 3+ ,sqlite3 and Tkinter  
+~Python 3+ , sqlite3 and Tkinter  
 
 
 Usage:
