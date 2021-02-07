@@ -2,7 +2,6 @@
 
 A GUI Hotel-Management app based on Tkinter and sqlite3 for Database Management
 
-BY ![Dharun V S](https://github.com/dharunvs) and ***Jeelani***
 
 
 Requirements:
