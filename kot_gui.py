@@ -1,20 +1,12 @@
 from tkinter import *
 from settings import *
 from manage_data import Database
-try:
-    from pos_gui import *
-except:
-    pass
 
 
 class KOT:
     def __init__(self):
         self.window = None
         self.dbase = Database()
-        try:
-            self.posc = POS()
-        except:
-            pass
 
         W = KOT_WIDTH
         H = KOT_HEIGHT
@@ -22,7 +14,6 @@ class KOT:
         self.main_list = self.dbase.get_from_dbkot()
 
         self.main_frame = Frame
-        self.side_frame = Frame
 
     def run(self):
         self.dbase = Database()
@@ -119,7 +110,6 @@ class KOT:
 
 # ------------------------------- HELPERS ------------------------------------
 
-
     def done(self, order):
         a = self.main_frame.winfo_children()
         for i in range(len(a)):
@@ -129,10 +119,3 @@ class KOT:
                     a[i].destroy()
                     self.dbase.delete_from_dbkot(order)
                     break
-
-    def pos(self):
-        try:
-            self.posc.run()
-            self.window.destroy()
-        except:
-            pass
